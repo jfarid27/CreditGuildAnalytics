@@ -1,5 +1,6 @@
 import json
 from ape import Contract
+from eth_utils import from_wei
 
 class GuildToken:
     def __init__(self, contract_address:str,
@@ -11,3 +12,9 @@ class GuildToken:
         params = []
         terms = self.contract.liveGauges(*params)
         return terms
+    
+    def balance_of(self, address:str):
+        """Return the balance of the given address."""
+        params = [address]
+        balance = self.contract.balanceOf(*params)
+        return from_wei(balance, 'ether')
