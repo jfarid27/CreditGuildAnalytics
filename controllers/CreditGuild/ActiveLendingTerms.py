@@ -2,7 +2,6 @@ import pandas as pd
 from time import sleep
 from models.CreditGuild.GuildToken import GuildToken
 from models.CreditGuild.LoanTerm import LoanTerm
-from models.CreditGuild.ProfitManager import ProfitManager
 
 def fetch_terms_and_debt(guild_token_address:str, slow=True, debug=False):
     """
@@ -32,9 +31,9 @@ def fetch_terms_and_debt(guild_token_address:str, slow=True, debug=False):
         colToken = term_contract.get_collateral_token()
         ir = term_contract.get_interest_rate()
 
-        profit_manager = ProfitManager(profit_manager_addr)
-        total_issued = profit_manager.fetch_total_debt()
+        total_issued = term_contract.get_debt()
         totals.append({
+            'termAddress': term_address,
             'creditToken': ct,
             'collateral': colToken,
             'interestRate': ir,

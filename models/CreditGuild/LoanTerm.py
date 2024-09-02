@@ -29,5 +29,9 @@ class LoanTerm:
     def get_interest_rate(self):
         params = self.contract.getParameters()
         return from_wei(params['interestRate'], 'ether')
+    
+    def get_debt(self):
+        """Return the total debt issued by the loan term."""
+        return from_wei(self.contract.issuance(), 'ether')
 
     
