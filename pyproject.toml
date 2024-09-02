@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "eth-data"
+name = "CreditGuildAnalytics"
 version = "0.1.0"
-description = ""
-authors = ["Your Name <you@example.com>"]
+description = "Analytics notebook for Credit Guild."
+authors = ["jrab227@gmail.com"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
