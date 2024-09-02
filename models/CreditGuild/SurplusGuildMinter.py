@@ -10,6 +10,5 @@ class SurplusGuildMinter:
     
     def fetch_user_stake(self, user_address:str, term_address:str):
         """Return the total stake for the user in the given term for this SGM."""
-        params= [user_address, term_address]
-        stake_details = self.contract.getUserStake(**params)
+        stake_details = self.contract.getUserStake(user_address, term_address)
         return from_wei(stake_details['credit'], 'ether')
