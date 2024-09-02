@@ -4,20 +4,20 @@ from models.CreditGuild.GuildToken import GuildToken
 from models.CreditGuild.LoanTerm import LoanTerm
 from models.CreditGuild.SurplusGuildMinter import SurplusGuildMinter
 
-def fetch_user_stakes(user_address:str, df:pd.DataFrame, debug=False, slow=True):
+def fetch_user_stakes(user_address:str, terms_df:pd.DataFrame, debug=False, slow=True):
     """
-    Fetches the user stakes for a given user address from a DataFrame.
+    Fetches the user stakes for a given user address from the provided terms DataFrame.
 
     Parameters:
     - user_address (str): The address of the user.
-    - df (pd.DataFrame): The DataFrame containing the lending terms.
-    - debug (bool, optional): Whether to enable debugging mode. Defaults to False.
-    - slow (bool, optional): Whether to enable slow mode. Defaults to True.
+    - terms_df (pd.DataFrame): The DataFrame containing the lending terms.
+    - debug (bool, optional): If True, enables debug mode and prints debug information. Default is False.
+    - slow (bool, optional): If True, enables slow mode and adds a delay of 0.5 seconds between each iteration. Default is True.
 
     Returns:
-    - pd.DataFrame: The modified DataFrame with user stakes added.
+    - pd.DataFrame: The DataFrame containing the user stakes for the given user address.
     """
-    terms = df[["termAddress", "creditToken", "surplusGuildMinter"]].copy()
+    terms = terms_df[["termAddress", "creditToken", "surplusGuildMinter"]].copy()
     user_stakes = []
     count = 0
     for term in terms.itertuples():
@@ -27,9 +27,32 @@ def fetch_user_stakes(user_address:str, df:pd.DataFrame, debug=False, slow=True)
             break
         sgm = SurplusGuildMinter(term.surplusGuildMinter)
         stake = sgm.fetch_user_stake(user_address, term.termAddress)
-        user_stakes.append({"termAddress": term.termAddress, 'userStake': float(stake)})
+        debug and print(f"User stake for {user_address} in {term.termAddress}: {stake}")
+        if stake > 0:
+            user_stakes.append({"termAddress": term.termAddress, 'userStake': stake})
         count += 1
+    if not user_stakes:
+        return pd.DataFrame()
     return pd.merge(terms, pd.DataFrame(user_stakes), on="termAddress", how="right")
+
+def fetch_users_stakes(users_df: pd.DataFrame, merged_staking: pd.DataFrame, slow: bool = True):
+    """
+    Fetches the stakes of multiple users.
+
+    Args:
+        users_df (pd.DataFrame): DataFrame containing user information.
+        merged_staking (pd.DataFrame): DataFrame containing merged staking data.
+        slow (bool, optional): Flag indicating whether to use slow fetching. Defaults to True.
+
+    Returns:
+        pd.DataFrame: DataFrame containing the stakes of the users.
+    """
+    users_stakes = pd.DataFrame()
+    for user in users_df.itertuples():
+        user_stakes = fetch_user_stakes(user.address, merged_staking, slow=True)
+        if not user_stakes.empty:
+            user_stakes["address"] = user.address
+            users_stakes = pd.concat([users_stakes, user_stakes], ignore_index=True)
 
 def fetch_terms_and_debt(guild_token_address:str, slow=True, debug=False):
     """
