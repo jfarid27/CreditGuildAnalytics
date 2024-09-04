@@ -4,7 +4,7 @@ from eth_utils import from_wei
 
 class LoanTerm:
     def __init__(self, contract_address:str,
-                 abi_file:str="contracts/CreditGuild/LoanTermABI.json"):
+                 abi_file:str="CreditGuild/contracts/LoanTermABI.json"):
         self.contract = Contract(contract_address, abi=abi_file)
 
     def active_guages(self):

@@ -4,7 +4,7 @@ from eth_utils import from_wei
 
 class ProfitManager:
     def __init__(self, contract_address:str,
-                 abi_file:str="contracts/CreditGuild/ProfitManagerABI.json"):
+                 abi_file:str="CreditGuild/contracts/ProfitManagerABI.json"):
         self.contract = Contract(contract_address, abi=abi_file)
     
     def fetch_total_debt(self):
