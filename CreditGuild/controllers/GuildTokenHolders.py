@@ -1,7 +1,7 @@
 from typing import List
 import pandas as pd
 from time import sleep
-from models.CreditGuild.GuildToken import GuildToken
+from CreditGuild.models.GuildToken import GuildToken
 
 def fetch_holders(addresses:List[str], guild_token_address:str, slow=True, debug=False):
     """

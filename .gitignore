@@ -1,5 +1,8 @@
 # Local files
 
+.build
+.cryo
+*.parquet
 .env
 ape-config.yaml
 data/

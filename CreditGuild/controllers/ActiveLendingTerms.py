@@ -1,8 +1,8 @@
 import pandas as pd
 from time import sleep
-from models.CreditGuild.GuildToken import GuildToken
-from models.CreditGuild.LoanTerm import LoanTerm
-from models.CreditGuild.SurplusGuildMinter import SurplusGuildMinter
+from CreditGuild.models.GuildToken import GuildToken
+from CreditGuild.models.LoanTerm import LoanTerm
+from CreditGuild.models.SurplusGuildMinter import SurplusGuildMinter
 
 def fetch_user_stakes(user_address:str, terms_df:pd.DataFrame, debug=False, slow=True):
     """
